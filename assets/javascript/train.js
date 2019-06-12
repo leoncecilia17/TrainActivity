@@ -14,7 +14,7 @@ $(document).ready(function () {
 
     var database = firebase.database();
 
-    $("#add-train-btn").on("click", function(event) {
+    $("#add-train-btn").on("click", function (event) {
         event.preventDefault();
 
         var trainName = $("#train-name-input").val().trim();
@@ -23,10 +23,10 @@ $(document).ready(function () {
         var trainFrequency = $("#frequency-input").val().trim();
 
         var newTrain = {
-            train: trainName, 
+            train: trainName,
             destination: trainDestination,
             starttime: trainTime,
-            frequency: trainFrequency 
+            frequency: trainFrequency
         };
 
         database.ref().push(newTrain);
@@ -36,7 +36,7 @@ $(document).ready(function () {
         console.log(newTrain.starttime);
         console.log(newTrain.frequency);
 
-        alert("Congrats! You have added a new train schedule.");
+        alert("Congrats! You have added a new train to the schedule tracker. Check your results at the top!");
 
         $("#train-name-input").val("");
         $("#destination-input").val("");
@@ -44,7 +44,7 @@ $(document).ready(function () {
         $("#frequency-input").val("");
     });
 
-    database.ref().on("child_added", function(Snapshot) {
+    database.ref().on("child_added", function (Snapshot) {
         console.log(Snapshot.val());
 
         var train = Snapshot.val().train;
@@ -57,31 +57,30 @@ $(document).ready(function () {
         console.log(starttime);
         console.log(frequency);
 
-         // Solved Mathematically
-    // Test case 1:
-    // 16 - 00 = 16
-    // 16 % 3 = 1 (Modulus is the remainder)
-    // 3 - 1 = 2 minutes away
-    // 2 + 3:16 = 3:18
 
-    
+        // Test case 1:
+        // 16 - 00 = 16
+        // 16 % 3 = 1 (Modulus is the remainder)
+        // 3 - 1 = 2 minutes away
+        // 2 + 3:16 = 3:18
+
+
         var starttimeConverted = moment(starttime, "hh:mm")
         var currentTime = moment();
-       
-        var diffTime= currentTime.diff(starttimeConverted, "minutes")
-        var tRemainder=diffTime % frequency
-        var minsAway=frequency - tRemainder 
-        var arrivalTime= currentTime.add(minsAway, "minutes")
-        arrivalTime=arrivalTime.format("hh:mm a")
- 
+
+        var diffTime = currentTime.diff(starttimeConverted, "minutes")
+        var tRemainder = diffTime % frequency
+        var minsAway = frequency - tRemainder
+        var arrivalTime = currentTime.add(minsAway, "minutes")
+        arrivalTime = arrivalTime.format("hh:mm a")
+
         console.log(diffTime)
-        if(diffTime<0)
-        {
-            arrivalTime=starttimeConverted.format("hh:mm a")   
-            minsAway=diffTime * -1
+        if (diffTime < 0) {
+            arrivalTime = starttimeConverted.format("hh:mm a")
+            minsAway = diffTime * -1
         }
 
-       var tr = $("<tr>");
+        var tr = $("<tr>");
         tr.append($("<td>").text(train))
         tr.append($("<td>").text(destination))
         tr.append($("<td>").text(frequency))
